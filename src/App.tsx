@@ -125,9 +125,9 @@ const App: React.FC = () => {
                 </div>
                 
                 {products?.length ? <strong>Produtos relacionados</strong> : ''}
-                <div style={{ display: 'column', gap: '1rem', maxWidth: '100%', overflowX: 'auto', marginLeft: '2rem' }}>
+                <div style={{ display: 'column', gap: '.1rem', maxWidth: '100%', overflowX: 'auto' }}>
                   {products?.length ? products?.map((product: any, index: any) => (
-                    <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.5rem', border: '1px solid #FFF', padding: '.5rem', borderRadius: '5px' }}>
+                    <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.5rem', border: '1px solid #FFF', padding: '.5rem', borderRadius: '5px', marginTop: '.5rem' }}>
                       <span>
                         {product?.product?.displayName}
                       </span>
