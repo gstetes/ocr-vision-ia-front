@@ -113,7 +113,7 @@ const App: React.FC = () => {
                 <input type="file" onChange={(e: any) => setSelectedFile(e?.target?.files[0])} accept=".png, .jpg, .jpeg"/>
                 <div style={{ width: '400px', display: 'flex', gap: '1rem'}}>
                   <button
-                    style={{ width: '200px' }}
+                    style={{ width: '400px' }}
                     onClick={() => {
                       setProducts([])
                       setCreateProductIsOpen(true)
@@ -121,7 +121,7 @@ const App: React.FC = () => {
                   >
                     Criar produto
                   </button>
-                  <button style={{ width: '200px' }} onClick={() => setCameraIsOpen(true)}>Foto</button>
+                  {/* <button style={{ width: '200px' }} onClick={() => setCameraIsOpen(true)}>Foto</button> */}
                 </div>
                 
                 {products?.length ? <strong>Produtos relacionados</strong> : ''}
