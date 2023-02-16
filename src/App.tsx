@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import Loading from './components/Loading';
 
 const App: React.FC = () => {
-  const [selectedFile, setSelectedFile] = useState()
+  const [selectedFile, setSelectedFile] = useState(null)
   const [products, setProducts] = useState([])
   const [cameraIsOpen, setCameraIsOpen] = useState(false)
   const [createProductIsOpen, setCreateProductIsOpen] = useState(false)
