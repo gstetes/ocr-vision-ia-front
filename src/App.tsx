@@ -110,19 +110,22 @@ const App: React.FC = () => {
           <div className="content-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem'}}>
             {!cameraIsOpen ? (
               <>
-                <input type="file" style={{ width: '200px' }} onChange={(e: any) => setSelectedFile(e?.target?.files[0])} accept=".png, .jpg, .jpeg"/>
-                <button
-                  style={{ width: '200px' }}
-                  onClick={() => {
-                    setProducts([])
-                    setCreateProductIsOpen(true)
-                  }}
-                >
-                  Criar produto
-                </button>
-                <button onClick={() => setCameraIsOpen(true)}>Foto</button>
+                <input type="file" onChange={(e: any) => setSelectedFile(e?.target?.files[0])} accept=".png, .jpg, .jpeg"/>
+                <div style={{ width: '400px', display: 'flex', gap: '1rem'}}>
+                  <button
+                    style={{ width: '200px' }}
+                    onClick={() => {
+                      setProducts([])
+                      setCreateProductIsOpen(true)
+                    }}
+                  >
+                    Criar produto
+                  </button>
+                  <button style={{ width: '200px' }} onClick={() => setCameraIsOpen(true)}>Foto</button>
+                </div>
+                
                 {products?.length ? <strong>Produtos relacionados</strong> : ''}
-                <div style={{ display: 'flex', gap: '1rem', maxWidth: '100%', overflowX: 'auto', marginLeft: '2rem' }}>
+                <div style={{ display: 'column', gap: '1rem', maxWidth: '100%', overflowX: 'auto', marginLeft: '2rem' }}>
                   {products?.length ? products?.map((product: any, index: any) => (
                     <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.5rem', border: '1px solid #FFF', padding: '.5rem', borderRadius: '5px' }}>
                       <span>
