@@ -7,6 +7,11 @@ const App: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState()
   const [products, setProducts] = useState([])
   const [cameraIsOpen, setCameraIsOpen] = useState(false)
+  const [createProductIsOpen, setCreateProductIsOpen] = useState(false)
+
+  const [productId, setProductId] = useState('')
+  const [productName, setProductName] = useState('')
+  const [productImages, setProductImages] = useState([])
 
   const webcamRef = useRef<any>(null)
 
@@ -51,44 +56,84 @@ const App: React.FC = () => {
     getSimilaryProducts(file)
   }, [webcamRef])
 
+  const handleCreateProduct = useCallback(async () => {
+    const form = new FormData()
+    form.append('productId', productId)
+    form.append('productName', productName)
+    if (productImages?.length) {
+      productImages.forEach(file => {
+        form.append('file', file)
+      })
+    }
+    form.append('productSetId', 'geral')
+
+    try {
+      const { status } = await api.post('/createProduct', form)
+
+      if (status === 200) {
+        alert('Produto criado')
+        setProductId('')
+        setProductName('')
+        setProductImages([])
+        setCreateProductIsOpen(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }, [productId, productName, productImages])
+
   useEffect(() => {
     getSimilaryProducts(selectedFile)
   }, [selectedFile])
 
   return (
     <div className="container">
-      <div className="content-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-        {!cameraIsOpen ? (
-          <>
-            <input type="file" onChange={(e: any) => setSelectedFile(e?.target?.files[0])} />
-            <button onClick={() => setCameraIsOpen(true)}>Foto</button>
-            {products?.length ? 'Produtos relacionados:' : ''}
-            {products?.length ? products?.map((product: any, index: any) => (
-            <div key={index} style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>
-                Product name: {product?.product?.displayName}
-              </span>
-              <img src={product?.image} alt="Imagem"  width={200} />
-              <span>
-                Similarity: {Math.ceil(product?.score * 100)}%
-              </span>
-            </div>
-          )) : null}
-          </>
-        ) : (
-          <>
-            <button onClick={() => setCameraIsOpen(false)}>Galeria</button>
-            <Webcam
-              audio={false}
-              height={800}
-              width={800}
-              screenshotFormat="image/jpeg"
-              ref={webcamRef}
-            />
-            <button onClick={() => handleTakePicture()}>Tirar foto</button>
-          </>
-        )}
-      </div>
+      {!createProductIsOpen ? (
+        <div className="content-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+          {!cameraIsOpen ? (
+            <>
+              <input type="file" onChange={(e: any) => setSelectedFile(e?.target?.files[0])} />
+              <button onClick={() => setCreateProductIsOpen(true)}>Criar produto</button>
+              <button onClick={() => setCameraIsOpen(true)}>Foto</button>
+              {products?.length ? 'Produtos relacionados:' : ''}
+              {products?.length ? products?.map((product: any, index: any) => (
+              <div key={index} style={{ display: 'flex', flexDirection: 'column' }}>
+                <span>
+                  Product name: {product?.product?.displayName}
+                </span>
+                <img src={product?.image} alt="Imagem"  width={200} />
+                <span>
+                  Similarity: {Math.ceil(product?.score * 100)}%
+                </span>
+              </div>
+            )) : null}
+            </>
+          ) : (
+            <>
+              <button onClick={() => setCameraIsOpen(false)}>Galeria</button>
+              <Webcam
+                audio={false}
+                height={800}
+                width={800}
+                screenshotFormat="image/jpeg"
+                ref={webcamRef}
+
+              />
+              <button onClick={() => handleTakePicture()}>Tirar foto</button>
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="content-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+          <input type="text" placeholder='Product id' value={productId} onChange={(e) => setProductId(e.target.value) }/>
+          <input type="text" placeholder='Product name' value={productName} onChange={(e) => setProductName(e.target.value) }/>
+          <input type="file" multiple={true} onChange={(e) => setProductImages(Array.from(e?.target?.files as any)) }/>
+          <button type="button" onClick={(e) => {
+            e.preventDefault()
+            handleCreateProduct()
+          }}>Criar produto</button>
+        </div>
+      )}
     </div>
   )
 }
